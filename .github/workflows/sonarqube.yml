@@ -1,6 +1,6 @@
 # SonarQube Cloud (SonarCloud) CI-based analysis via GitHub Actions.
-# Uses Maven scanner (sonar-maven-plugin) which is more efficient for Maven projects.
-# Prerequisite: repository secrets SONAR_TOKEN (SonarCloud) and SONAR_HOST_URL=https://sonarcloud.io
+# Generic scanner for source-only analysis (no compilation needed for decompiled code).
+# Prerequisite: repo secrets SONAR_TOKEN and SONAR_HOST_URL=https://sonarcloud.io
 name: "SonarQube"
 
 on:
@@ -15,7 +15,7 @@ jobs:
     name: SonarQube Scan
     runs-on: ubuntu-latest
     env:
-      MAVEN_OPTS: "-Xmx6144m -Xms2048m"
+      SONAR_SCANNER_OPTS: "-Xmx7168m -Xms2048m"
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -29,8 +29,8 @@ jobs:
           java-version: '17'
           cache: maven
 
-      - name: SonarQube Scan (Maven)
-        run: mvn -B verify sonar:sonar -Dsonar.projectKey=blaze209_b1test -Dsonar.organization=blaze209 -Dsonar.host.url=https://sonarcloud.io
+      - name: SonarQube Scan
+        uses: sonarsource/sonarqube-scan-action@v6
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
           SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
