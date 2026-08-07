@@ -31,4 +31,4 @@ jobs:
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
           SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
-          SONAR_SCANNER_OPTS: "-Xmx5120m"
+          SONAR_SCANNER_OPTS: "-Xmx6144m"
