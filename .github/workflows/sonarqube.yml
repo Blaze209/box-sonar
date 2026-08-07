@@ -1,6 +1,5 @@
 # SonarQube Cloud (SonarCloud) CI-based analysis via GitHub Actions.
-# Prerequisite: add repository secrets SONAR_TOKEN (from SonarCloud) and
-# SONAR_HOST_URL=https://sonarcloud.io, and import the project in SonarCloud.
+# Prerequisite: repo secrets SONAR_TOKEN and SONAR_HOST_URL=https://sonarcloud.io
 name: "SonarQube"
 
 on:
@@ -21,14 +20,15 @@ jobs:
           fetch-depth: 0
 
       - name: Set up JDK
-        uses: actions/setup-java@v4
+        uses: actions/setup-java@v5
         with:
           distribution: 'temurin'
-          java-version: '11'
+          java-version: '17'
           cache: maven
 
       - name: SonarQube Scan
-        uses: sonarsource/sonarqube-scan-action@v5
+        uses: sonarsource/sonarqube-scan-action@v6
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
           SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
+          SONAR_SCANNER_OPTS: "-Xmx5120m"
