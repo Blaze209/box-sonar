@@ -15,7 +15,7 @@ jobs:
     name: SonarQube Scan
     runs-on: ubuntu-latest
     env:
-      SONAR_SCANNER_OPTS: "-Xmx5120m -Xms1024m"
+      _JAVA_OPTIONS: "-XX:MaxRAMPercentage=80 -XX:MinRAMPercentage=50 -XX:+UseG1GC"
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
