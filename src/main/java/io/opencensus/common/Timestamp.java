@@ -1,0 +1,85 @@
+package io.opencensus.common;
+
+import androidx.media3.common.C;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
+
+/* JADX INFO: loaded from: classes4.dex */
+public abstract class Timestamp implements Comparable<Timestamp> {
+    public abstract int getNanos();
+
+    public abstract long getSeconds();
+
+    Timestamp() {
+    }
+
+    public static Timestamp create(long j, int i) {
+        if (j < -315576000000L) {
+            throw new IllegalArgumentException("'seconds' is less than minimum (-315576000000): " + j);
+        }
+        if (j > 315576000000L) {
+            throw new IllegalArgumentException("'seconds' is greater than maximum (315576000000): " + j);
+        }
+        if (i < 0) {
+            throw new IllegalArgumentException("'nanos' is less than zero: " + i);
+        }
+        if (i > 999999999) {
+            throw new IllegalArgumentException("'nanos' is greater than maximum (999999999): " + i);
+        }
+        return new AutoValue_Timestamp(j, i);
+    }
+
+    public static Timestamp fromMillis(long j) {
+        return create(floorDiv(j, 1000L), (int) (((long) ((int) floorMod(j, 1000L))) * 1000000));
+    }
+
+    public Timestamp addNanos(long j) {
+        return plus(0L, j);
+    }
+
+    public Timestamp addDuration(Duration duration) {
+        return plus(duration.getSeconds(), duration.getNanos());
+    }
+
+    public Duration subtractTimestamp(Timestamp timestamp) {
+        long j;
+        long seconds = getSeconds() - timestamp.getSeconds();
+        int nanos = getNanos() - timestamp.getNanos();
+        if (seconds >= 0 || nanos <= 0) {
+            if (seconds > 0 && nanos < 0) {
+                seconds--;
+                j = ((long) nanos) + C.NANOS_PER_SECOND;
+            }
+            return Duration.create(seconds, nanos);
+        }
+        seconds++;
+        j = ((long) nanos) - C.NANOS_PER_SECOND;
+        nanos = (int) j;
+        return Duration.create(seconds, nanos);
+    }
+
+    @Override // java.lang.Comparable
+    public int compareTo(Timestamp timestamp) {
+        int iCompareLongs = TimeUtils.compareLongs(getSeconds(), timestamp.getSeconds());
+        return iCompareLongs != 0 ? iCompareLongs : TimeUtils.compareLongs(getNanos(), timestamp.getNanos());
+    }
+
+    private Timestamp plus(long j, long j2) {
+        if ((j | j2) == 0) {
+            return this;
+        }
+        return ofEpochSecond(TimeUtils.checkedAdd(TimeUtils.checkedAdd(getSeconds(), j), j2 / C.NANOS_PER_SECOND), ((long) getNanos()) + (j2 % C.NANOS_PER_SECOND));
+    }
+
+    private static Timestamp ofEpochSecond(long j, long j2) {
+        return create(TimeUtils.checkedAdd(j, floorDiv(j2, C.NANOS_PER_SECOND)), (int) floorMod(j2, C.NANOS_PER_SECOND));
+    }
+
+    private static long floorDiv(long j, long j2) {
+        return BigDecimal.valueOf(j).divide(BigDecimal.valueOf(j2), 0, RoundingMode.FLOOR).longValue();
+    }
+
+    private static long floorMod(long j, long j2) {
+        return j - (floorDiv(j, j2) * j2);
+    }
+}

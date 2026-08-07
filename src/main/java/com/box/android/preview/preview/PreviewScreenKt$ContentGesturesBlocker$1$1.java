@@ -1,0 +1,41 @@
+package com.box.android.preview.preview;
+
+import androidx.compose.foundation.gestures.TapGestureDetectorKt;
+import androidx.compose.ui.geometry.Offset;
+import androidx.compose.ui.input.pointer.PointerInputEventHandler;
+import androidx.compose.ui.input.pointer.PointerInputScope;
+import kotlin.Metadata;
+import kotlin.Unit;
+import kotlin.coroutines.Continuation;
+import kotlin.coroutines.intrinsics.IntrinsicsKt;
+import kotlin.jvm.functions.Function0;
+import kotlin.jvm.functions.Function1;
+
+/* JADX INFO: compiled from: PreviewScreen.kt */
+/* JADX INFO: loaded from: classes12.dex */
+@Metadata(k = 3, mv = {2, 2, 0}, xi = 48)
+final class PreviewScreenKt$ContentGesturesBlocker$1$1 implements PointerInputEventHandler {
+    final /* synthetic */ Function0<Unit> $onGesture;
+
+    PreviewScreenKt$ContentGesturesBlocker$1$1(Function0<Unit> function0) {
+        this.$onGesture = function0;
+    }
+
+    /* JADX INFO: Access modifiers changed from: private */
+    public static final Unit invoke$lambda$0(Function0 function0, Offset offset) {
+        function0.invoke();
+        return Unit.INSTANCE;
+    }
+
+    @Override // androidx.compose.ui.input.pointer.PointerInputEventHandler
+    public final Object invoke(PointerInputScope pointerInputScope, Continuation<? super Unit> continuation) {
+        final Function0<Unit> function0 = this.$onGesture;
+        Object objDetectTapGestures$default = TapGestureDetectorKt.detectTapGestures$default(pointerInputScope, null, null, null, new Function1() { // from class: com.box.android.preview.preview.PreviewScreenKt$ContentGesturesBlocker$1$1$$ExternalSyntheticLambda0
+            @Override // kotlin.jvm.functions.Function1
+            public final Object invoke(Object obj) {
+                return PreviewScreenKt$ContentGesturesBlocker$1$1.invoke$lambda$0(function0, (Offset) obj);
+            }
+        }, continuation, 7, null);
+        return objDetectTapGestures$default == IntrinsicsKt.getCOROUTINE_SUSPENDED() ? objDetectTapGestures$default : Unit.INSTANCE;
+    }
+}

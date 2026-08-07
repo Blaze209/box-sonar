@@ -1,0 +1,31 @@
+package io.opencensus.stats;
+
+/* JADX INFO: loaded from: classes4.dex */
+final class AutoValue_AggregationData_LastValueDataLong extends AggregationData.LastValueDataLong {
+    private final long lastValue;
+
+    AutoValue_AggregationData_LastValueDataLong(long j) {
+        this.lastValue = j;
+    }
+
+    @Override // io.opencensus.stats.AggregationData.LastValueDataLong
+    public long getLastValue() {
+        return this.lastValue;
+    }
+
+    public String toString() {
+        return "LastValueDataLong{lastValue=" + this.lastValue + "}";
+    }
+
+    public boolean equals(Object obj) {
+        if (obj == this) {
+            return true;
+        }
+        return (obj instanceof AggregationData.LastValueDataLong) && this.lastValue == ((AggregationData.LastValueDataLong) obj).getLastValue();
+    }
+
+    public int hashCode() {
+        long j = this.lastValue;
+        return (int) (((long) 1000003) ^ (j ^ (j >>> 32)));
+    }
+}

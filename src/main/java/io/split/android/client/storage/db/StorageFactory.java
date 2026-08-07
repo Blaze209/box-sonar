@@ -1,0 +1,146 @@
+package io.split.android.client.storage.db;
+
+import io.split.android.client.service.ServiceConstants;
+import io.split.android.client.service.impressions.observer.PersistentImpressionsObserverCacheStorage;
+import io.split.android.client.service.impressions.observer.SqlitePersistentImpressionsObserverCacheStorage;
+import io.split.android.client.storage.attributes.AttributesStorageContainer;
+import io.split.android.client.storage.attributes.AttributesStorageContainerImpl;
+import io.split.android.client.storage.attributes.PersistentAttributesStorage;
+import io.split.android.client.storage.attributes.SqLitePersistentAttributesStorage;
+import io.split.android.client.storage.cipher.SplitCipher;
+import io.split.android.client.storage.cipher.SplitCipherFactory;
+import io.split.android.client.storage.events.EventsStorage;
+import io.split.android.client.storage.events.PersistentEventsStorage;
+import io.split.android.client.storage.events.SqLitePersistentEventsStorage;
+import io.split.android.client.storage.general.GeneralInfoStorage;
+import io.split.android.client.storage.general.GeneralInfoStorageImpl;
+import io.split.android.client.storage.impressions.ImpressionsStorage;
+import io.split.android.client.storage.impressions.PersistentImpressionsCountStorage;
+import io.split.android.client.storage.impressions.PersistentImpressionsStorage;
+import io.split.android.client.storage.impressions.PersistentImpressionsUniqueStorage;
+import io.split.android.client.storage.impressions.SqLitePersistentImpressionsCountStorage;
+import io.split.android.client.storage.impressions.SqLitePersistentImpressionsStorage;
+import io.split.android.client.storage.impressions.SqlitePersistentUniqueStorage;
+import io.split.android.client.storage.mysegments.MySegmentsStorageContainer;
+import io.split.android.client.storage.mysegments.MySegmentsStorageContainerImpl;
+import io.split.android.client.storage.mysegments.SqLitePersistentMySegmentsStorage;
+import io.split.android.client.storage.rbs.PersistentRuleBasedSegmentStorage;
+import io.split.android.client.storage.rbs.RuleBasedSegmentStorageProducer;
+import io.split.android.client.storage.rbs.RuleBasedSegmentStorageProducerImpl;
+import io.split.android.client.storage.rbs.SqLitePersistentRuleBasedSegmentStorageProvider;
+import io.split.android.client.storage.splits.PersistentSplitsStorage;
+import io.split.android.client.storage.splits.SplitsStorage;
+import io.split.android.client.storage.splits.SplitsStorageImpl;
+import io.split.android.client.storage.splits.SqLitePersistentSplitsStorage;
+import io.split.android.client.telemetry.storage.InMemoryTelemetryStorage;
+import io.split.android.client.telemetry.storage.NoOpTelemetryStorage;
+import io.split.android.client.telemetry.storage.TelemetryStorage;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ScheduledThreadPoolExecutor;
+import java.util.concurrent.atomic.AtomicLong;
+
+/* JADX INFO: loaded from: classes4.dex */
+public class StorageFactory {
+    public static SplitsStorage getSplitsStorage(SplitRoomDatabase splitRoomDatabase, SplitCipher splitCipher) {
+        return new SplitsStorageImpl(getPersistentSplitsStorage(splitRoomDatabase, splitCipher));
+    }
+
+    public static MySegmentsStorageContainer getMySegmentsStorage(SplitRoomDatabase splitRoomDatabase, SplitCipher splitCipher) {
+        return getMySegmentsStorageContainer(splitRoomDatabase, splitCipher);
+    }
+
+    public static MySegmentsStorageContainer getMySegmentsStorageForWorker(SplitRoomDatabase splitRoomDatabase, String apiKey, boolean encryptionEnabled) {
+        return getMySegmentsStorageContainer(splitRoomDatabase, SplitCipherFactory.create(apiKey, encryptionEnabled));
+    }
+
+    public static MySegmentsStorageContainer getMyLargeSegmentsStorage(SplitRoomDatabase splitRoomDatabase, SplitCipher splitCipher) {
+        return getMyLargeSegmentsStorageContainer(splitRoomDatabase, splitCipher);
+    }
+
+    public static MySegmentsStorageContainer getMyLargeSegmentsStorageForWorker(SplitRoomDatabase splitRoomDatabase, String apiKey, boolean encryptionEnabled) {
+        return getMyLargeSegmentsStorageContainer(splitRoomDatabase, SplitCipherFactory.create(apiKey, encryptionEnabled));
+    }
+
+    public static EventsStorage getEventsStorage(PersistentEventsStorage persistentEventsStorage, boolean isPersistenceEnabled) {
+        return new EventsStorage(persistentEventsStorage, isPersistenceEnabled);
+    }
+
+    public static PersistentSplitsStorage getPersistentSplitsStorage(SplitRoomDatabase splitRoomDatabase, SplitCipher splitCipher) {
+        return new SqLitePersistentSplitsStorage(splitRoomDatabase, splitCipher);
+    }
+
+    public static ImpressionsStorage getImpressionsStorage(PersistentImpressionsStorage persistentImpressionsStorage, boolean isPersistenceEnabled) {
+        return new ImpressionsStorage(persistentImpressionsStorage, isPersistenceEnabled);
+    }
+
+    public static PersistentImpressionsStorage getPersistentImpressionsStorage(SplitRoomDatabase splitRoomDatabase, SplitCipher splitCipher) {
+        return new SqLitePersistentImpressionsStorage(splitRoomDatabase, ServiceConstants.RECORDED_DATA_EXPIRATION_PERIOD, splitCipher);
+    }
+
+    public static PersistentImpressionsStorage getPersistentImpressionsStorageForWorker(SplitRoomDatabase splitRoomDatabase, String apiKey, boolean encryptionEnabled) {
+        return getPersistentImpressionsStorage(splitRoomDatabase, SplitCipherFactory.create(apiKey, encryptionEnabled));
+    }
+
+    public static PersistentEventsStorage getPersistentEventsStorage(SplitRoomDatabase splitRoomDatabase, SplitCipher splitCipher) {
+        return new SqLitePersistentEventsStorage(splitRoomDatabase, ServiceConstants.RECORDED_DATA_EXPIRATION_PERIOD, splitCipher);
+    }
+
+    public static PersistentEventsStorage getPersistentEventsStorageForWorker(SplitRoomDatabase splitRoomDatabase, String apiKey, boolean encryptionEnabled) {
+        return getPersistentEventsStorage(splitRoomDatabase, SplitCipherFactory.create(apiKey, encryptionEnabled));
+    }
+
+    public static PersistentImpressionsCountStorage getPersistentImpressionsCountStorage(SplitRoomDatabase splitRoomDatabase, SplitCipher splitCipher) {
+        return new SqLitePersistentImpressionsCountStorage(splitRoomDatabase, ServiceConstants.RECORDED_DATA_EXPIRATION_PERIOD, splitCipher);
+    }
+
+    public static AttributesStorageContainer getAttributesStorage() {
+        return getAttributesStorageContainerInstance();
+    }
+
+    public static PersistentAttributesStorage getPersistentAttributesStorage(SplitRoomDatabase splitRoomDatabase, SplitCipher splitCipher) {
+        return new SqLitePersistentAttributesStorage(splitRoomDatabase.attributesDao(), splitCipher);
+    }
+
+    public static PersistentImpressionsUniqueStorage getPersistentImpressionsUniqueStorage(SplitRoomDatabase splitRoomDatabase, SplitCipher splitCipher) {
+        return new SqlitePersistentUniqueStorage(splitRoomDatabase, ServiceConstants.TEN_DAYS_EXPIRATION_PERIOD, splitCipher);
+    }
+
+    public static PersistentImpressionsUniqueStorage getPersistentImpressionsUniqueStorageForWorker(SplitRoomDatabase splitRoomDatabase, String apiKey, boolean encryptionEnabled) {
+        return getPersistentImpressionsUniqueStorage(splitRoomDatabase, SplitCipherFactory.create(apiKey, encryptionEnabled));
+    }
+
+    public static TelemetryStorage getTelemetryStorage(boolean shouldRecordTelemetry) {
+        if (shouldRecordTelemetry) {
+            return new InMemoryTelemetryStorage();
+        }
+        return new NoOpTelemetryStorage();
+    }
+
+    private static MySegmentsStorageContainer getMySegmentsStorageContainer(SplitRoomDatabase splitRoomDatabase, SplitCipher splitCipher) {
+        return new MySegmentsStorageContainerImpl(new SqLitePersistentMySegmentsStorage(splitCipher, splitRoomDatabase.mySegmentDao(), MySegmentEntity.creator()));
+    }
+
+    private static MySegmentsStorageContainer getMyLargeSegmentsStorageContainer(SplitRoomDatabase splitRoomDatabase, SplitCipher splitCipher) {
+        return new MySegmentsStorageContainerImpl(new SqLitePersistentMySegmentsStorage(splitCipher, splitRoomDatabase.myLargeSegmentDao(), MyLargeSegmentEntity.creator()));
+    }
+
+    private static AttributesStorageContainer getAttributesStorageContainerInstance() {
+        return new AttributesStorageContainerImpl();
+    }
+
+    public static PersistentImpressionsObserverCacheStorage getImpressionsObserverCachePersistentStorage(SplitRoomDatabase splitRoomDatabase, long expirationPeriod, ScheduledThreadPoolExecutor executorService) {
+        return new SqlitePersistentImpressionsObserverCacheStorage(splitRoomDatabase.impressionsObserverCacheDao(), expirationPeriod, executorService);
+    }
+
+    public static GeneralInfoStorage getGeneralInfoStorage(SplitRoomDatabase splitRoomDatabase) {
+        return new GeneralInfoStorageImpl(splitRoomDatabase.generalInfoDao());
+    }
+
+    public static PersistentRuleBasedSegmentStorage getPersistentRuleBasedSegmentStorage(SplitRoomDatabase splitRoomDatabase, SplitCipher splitCipher, GeneralInfoStorage generalInfoStorage) {
+        return new SqLitePersistentRuleBasedSegmentStorageProvider(splitCipher, splitRoomDatabase, generalInfoStorage).get();
+    }
+
+    public static RuleBasedSegmentStorageProducer getRuleBasedSegmentStorageForWorker(SplitRoomDatabase splitRoomDatabase, SplitCipher splitCipher) {
+        return new RuleBasedSegmentStorageProducerImpl(new SqLitePersistentRuleBasedSegmentStorageProvider(splitCipher, splitRoomDatabase, getGeneralInfoStorage(splitRoomDatabase)).get(), new ConcurrentHashMap(), new AtomicLong(-1L));
+    }
+}

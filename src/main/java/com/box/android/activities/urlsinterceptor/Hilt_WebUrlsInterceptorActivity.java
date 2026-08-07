@@ -1,0 +1,34 @@
+package com.box.android.activities.urlsinterceptor;
+
+import android.content.Context;
+import androidx.activity.contextaware.OnContextAvailableListener;
+import com.box.android.base.presentation.activities.BoxEntrypointActivity;
+import dagger.hilt.internal.GeneratedComponentManagerHolder;
+import dagger.hilt.internal.UnsafeCasts;
+
+/* JADX INFO: loaded from: classes9.dex */
+abstract class Hilt_WebUrlsInterceptorActivity extends BoxEntrypointActivity {
+    private boolean injected = false;
+
+    Hilt_WebUrlsInterceptorActivity() {
+        _initHiltInternal();
+    }
+
+    private void _initHiltInternal() {
+        addOnContextAvailableListener(new OnContextAvailableListener() { // from class: com.box.android.activities.urlsinterceptor.Hilt_WebUrlsInterceptorActivity.1
+            @Override // androidx.activity.contextaware.OnContextAvailableListener
+            public void onContextAvailable(Context context) {
+                Hilt_WebUrlsInterceptorActivity.this.inject();
+            }
+        });
+    }
+
+    @Override // com.box.android.base.presentation.activities.Hilt_BoxFragmentActivity
+    protected void inject() {
+        if (this.injected) {
+            return;
+        }
+        this.injected = true;
+        ((WebUrlsInterceptorActivity_GeneratedInjector) ((GeneratedComponentManagerHolder) UnsafeCasts.unsafeCast(this)).generatedComponent()).injectWebUrlsInterceptorActivity((WebUrlsInterceptorActivity) UnsafeCasts.unsafeCast(this));
+    }
+}

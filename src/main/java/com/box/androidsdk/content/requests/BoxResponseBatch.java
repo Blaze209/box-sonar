@@ -1,0 +1,17 @@
+package com.box.androidsdk.content.requests;
+
+import com.box.androidsdk.content.models.BoxObject;
+import java.util.ArrayList;
+
+/* JADX INFO: loaded from: classes13.dex */
+public class BoxResponseBatch extends BoxObject {
+    protected ArrayList<BoxResponse> mResponses = new ArrayList<>();
+
+    public ArrayList<BoxResponse> getResponses() {
+        return this.mResponses;
+    }
+
+    public void addResponse(BoxResponse boxResponse) {
+        this.mResponses.add(boxResponse);
+    }
+}

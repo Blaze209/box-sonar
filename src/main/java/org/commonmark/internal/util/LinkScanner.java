@@ -1,0 +1,136 @@
+package org.commonmark.internal.util;
+
+/* JADX INFO: loaded from: classes5.dex */
+public class LinkScanner {
+    public static int scanLinkLabelContent(CharSequence charSequence, int i) {
+        while (i < charSequence.length()) {
+            switch (charSequence.charAt(i)) {
+                case '[':
+                    return -1;
+                case '\\':
+                    int i2 = i + 1;
+                    if (Parsing.isEscapable(charSequence, i2)) {
+                        i = i2;
+                    }
+                    break;
+                case ']':
+                    return i;
+            }
+            i++;
+        }
+        return charSequence.length();
+    }
+
+    public static int scanLinkDestination(CharSequence charSequence, int i) {
+        char cCharAt;
+        if (i >= charSequence.length()) {
+            return -1;
+        }
+        if (charSequence.charAt(i) != '<') {
+            return scanLinkDestinationWithBalancedParens(charSequence, i);
+        }
+        while (true) {
+            i++;
+            if (i >= charSequence.length() || (cCharAt = charSequence.charAt(i)) == '\n' || cCharAt == '<') {
+                break;
+            }
+            if (cCharAt == '>') {
+                return i + 1;
+            }
+            if (cCharAt == '\\') {
+                int i2 = i + 1;
+                if (Parsing.isEscapable(charSequence, i2)) {
+                    i = i2;
+                }
+            }
+        }
+        return -1;
+    }
+
+    public static int scanLinkTitle(CharSequence charSequence, int i) {
+        if (i >= charSequence.length()) {
+            return -1;
+        }
+        char cCharAt = charSequence.charAt(i);
+        char c = '\"';
+        if (cCharAt != '\"') {
+            c = '\'';
+            if (cCharAt != '\'') {
+                if (cCharAt != '(') {
+                    return -1;
+                }
+                c = ')';
+            }
+        }
+        int iScanLinkTitleContent = scanLinkTitleContent(charSequence, i + 1, c);
+        if (iScanLinkTitleContent != -1 && iScanLinkTitleContent < charSequence.length() && charSequence.charAt(iScanLinkTitleContent) == c) {
+            return iScanLinkTitleContent + 1;
+        }
+        return -1;
+    }
+
+    /* JADX WARN: Code duplicated, block: B:11:0x001b  */
+    /* JADX WARN: Code duplicated, block: B:21:0x001a A[SYNTHETIC] */
+    /* JADX WARN: Code duplicated, block: B:9:0x0018 A[DONT_INVERT] */
+    public static int scanLinkTitleContent(CharSequence charSequence, int i, char c) {
+        while (i < charSequence.length()) {
+            char cCharAt = charSequence.charAt(i);
+            if (cCharAt == '\\') {
+                int i2 = i + 1;
+                if (Parsing.isEscapable(charSequence, i2)) {
+                    i = i2;
+                } else {
+                    if (cCharAt == c) {
+                        return i;
+                    }
+                    if (c == ')' && cCharAt == '(') {
+                        return -1;
+                    }
+                }
+            } else {
+                if (cCharAt == c) {
+                    return i;
+                }
+                if (c == ')') {
+                    continue;
+                }
+            }
+            i++;
+        }
+        return charSequence.length();
+    }
+
+    private static int scanLinkDestinationWithBalancedParens(CharSequence charSequence, int i) {
+        int i2 = 0;
+        int i3 = i;
+        while (i3 < charSequence.length()) {
+            char cCharAt = charSequence.charAt(i3);
+            if (cCharAt != 0 && cCharAt != ' ') {
+                if (cCharAt == '\\') {
+                    int i4 = i3 + 1;
+                    if (Parsing.isEscapable(charSequence, i4)) {
+                        i3 = i4;
+                    }
+                } else if (cCharAt == '(') {
+                    i2++;
+                    if (i2 > 32) {
+                        return -1;
+                    }
+                } else if (cCharAt != ')') {
+                    if (Character.isISOControl(cCharAt)) {
+                        if (i3 == i) {
+                            return -1;
+                        }
+                    }
+                } else if (i2 != 0) {
+                    i2--;
+                }
+                i3++;
+            } else if (i3 == i) {
+                return -1;
+            }
+            return i3;
+        }
+        return charSequence.length();
+    }
+}

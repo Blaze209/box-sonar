@@ -1,0 +1,20 @@
+package com.pspdfkit.internal.jni;
+
+/* JADX INFO: loaded from: classes3.dex */
+public enum NativeCertificateValidationStatus {
+    OK,
+    OK_BUT_SELF_SIGNED,
+    OK_BUT_COULD_NOT_CHECK_REVOCATION,
+    UNTRUSTED,
+    EXPIRED,
+    EXPIRED_NO_POE,
+    EXPIRED_BUT_VALID_IN_THE_PAST,
+    NOT_YET_VALID,
+    NOT_YET_VALID_NO_POE,
+    INVALID,
+    REVOKED,
+    REVOKED_NO_POE,
+    REVOKED_BUT_VALID_IN_THE_PAST,
+    FAILED_RETRIEVE_SIGNATURE_CONTENTS,
+    GENERAL_VALIDATION_PROBLEM
+}

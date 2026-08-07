@@ -1,0 +1,24 @@
+package com.box.android.browse.cpl.itemsList;
+
+import com.box.android.boxai.BoxAiCenterReducer;
+import kotlin.Metadata;
+import kotlin.jvm.functions.Function1;
+import kotlin.jvm.internal.FunctionReferenceImpl;
+import kotlin.jvm.internal.Intrinsics;
+
+/* JADX INFO: compiled from: ActionableItemsListScreen.kt */
+/* JADX INFO: loaded from: classes10.dex */
+@Metadata(k = 3, mv = {2, 2, 0}, xi = 48)
+final /* synthetic */ class ActionableItemsListScreenKt$ActionableItemsListScreen$boxAiCenterStore$2$1 extends FunctionReferenceImpl implements Function1<BoxAiCenterReducer.Action, ActionableItemsListReducer.Action.BoxAiCenterAction> {
+    public static final ActionableItemsListScreenKt$ActionableItemsListScreen$boxAiCenterStore$2$1 INSTANCE = new ActionableItemsListScreenKt$ActionableItemsListScreen$boxAiCenterStore$2$1();
+
+    ActionableItemsListScreenKt$ActionableItemsListScreen$boxAiCenterStore$2$1() {
+        super(1, ActionableItemsListReducer.Action.BoxAiCenterAction.class, "<init>", "<init>(Lcom/box/android/boxai/BoxAiCenterReducer$Action;)V", 0);
+    }
+
+    @Override // kotlin.jvm.functions.Function1
+    public final ActionableItemsListReducer.Action.BoxAiCenterAction invoke(BoxAiCenterReducer.Action p0) {
+        Intrinsics.checkNotNullParameter(p0, "p0");
+        return new ActionableItemsListReducer.Action.BoxAiCenterAction(p0);
+    }
+}

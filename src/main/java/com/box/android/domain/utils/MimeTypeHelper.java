@@ -1,0 +1,316 @@
+package com.box.android.domain.utils;
+
+import android.content.Context;
+import androidx.media3.common.MimeTypes;
+import androidx.media3.exoplayer.upstream.CmcdConfiguration;
+import androidx.media3.exoplayer.upstream.CmcdData;
+import com.box.android.capture.documentscanning.logic.TextRecognitionConverter;
+import com.box.android.common.utilities.BoxCommonConstants;
+import com.box.androidsdk.content.models.BoxRepresentation;
+import com.pspdfkit.document.sharing.DocumentSharingIntentHelper;
+import io.opentelemetry.semconv.resource.attributes.ResourceAttributes;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
+import org.jose4j.jwe.KeyManagementAlgorithmIdentifiers;
+
+/* JADX INFO: loaded from: classes11.dex */
+public class MimeTypeHelper {
+    private static Map<String, String> mimeTypeMap = new HashMap();
+
+    static {
+        initializeMimeTypeMap();
+    }
+
+    private static void initializeMimeTypeMap() {
+        mimeTypeMap.put(SupportedFileExtensions.DWG_EXTENSION, "application/acad");
+        mimeTypeMap.put("ez", "application/andrew-inset");
+        mimeTypeMap.put("chm", "application/chm");
+        mimeTypeMap.put("dia", "application/dia");
+        mimeTypeMap.put("tsp", "application/dsptype");
+        mimeTypeMap.put("epub", "application/epub+zip");
+        mimeTypeMap.put("jar", "application/java-archive");
+        mimeTypeMap.put("hqx", "application/mac-binhex40");
+        mimeTypeMap.put("cpt", "application/mac-compactpro");
+        mimeTypeMap.put("mathml", "application/mathml+xml");
+        mimeTypeMap.put("mml", "application/mathml+xml");
+        mimeTypeMap.put("mm", "application/mm");
+        mimeTypeMap.put("mmap", "application/mmap");
+        mimeTypeMap.put("doc", "application/msword");
+        mimeTypeMap.put("spd", "application/net.salepod.salepod_android.form");
+        mimeTypeMap.put(CmcdData.OBJECT_TYPE_AUDIO_ONLY, "application/octet-stream");
+        mimeTypeMap.put("bin", "application/octet-stream");
+        mimeTypeMap.put("dll", "application/octet-stream");
+        mimeTypeMap.put("dms", "application/octet-stream");
+        mimeTypeMap.put("dump", "application/octet-stream");
+        mimeTypeMap.put("exe", "application/octet-stream");
+        mimeTypeMap.put("lha", "application/octet-stream");
+        mimeTypeMap.put("lzh", "application/octet-stream");
+        mimeTypeMap.put("o", "application/octet-stream");
+        mimeTypeMap.put("so", "application/octet-stream");
+        mimeTypeMap.put("vds", "application/octet-stream");
+        mimeTypeMap.put("oda", "application/oda");
+        mimeTypeMap.put("pdf", DocumentSharingIntentHelper.MIME_TYPE_PDF);
+        mimeTypeMap.put(SupportedFileExtensions.AI_EXTENSION, "application/postscript");
+        mimeTypeMap.put("eps", "application/postscript");
+        mimeTypeMap.put("ps", "application/postscript");
+        mimeTypeMap.put("rdf", "application/rdf+xml");
+        mimeTypeMap.put("rss", "application/rss+xml");
+        mimeTypeMap.put("sev", "application/sev");
+        mimeTypeMap.put("smi", "application/smil");
+        mimeTypeMap.put("smil", "application/smil");
+        mimeTypeMap.put("azw", "application/vnd.amazon.ebook");
+        mimeTypeMap.put("apk", "application/vnd.android.package-archive");
+        mimeTypeMap.put("mif", "application/vnd.mif");
+        mimeTypeMap.put("gsheet", "application/vnd.ms-excel");
+        mimeTypeMap.put("xls", "application/vnd.ms-excel");
+        mimeTypeMap.put("ppt", "application/vnd.ms-powerpoint");
+        mimeTypeMap.put("odp", "application/vnd.oasis.opendocument.presentation");
+        mimeTypeMap.put("ods", "application/vnd.oasis.opendocument.spreadsheet");
+        mimeTypeMap.put("odt", "application/vnd.oasis.opendocument.text");
+        mimeTypeMap.put("pptx", "application/vnd.openxmlformats-officedocument.presentationml.presentation");
+        mimeTypeMap.put("xlsx", "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
+        mimeTypeMap.put("docx", "application/vnd.openxmlformats-officedocument.wordprocessingml.document");
+        mimeTypeMap.put("rmvb", "video/vnd.rn-realvideo");
+        mimeTypeMap.put("sxc", "application/vnd.sun.xml.calc");
+        mimeTypeMap.put("stc", "application/vnd.sun.xml.calc.template");
+        mimeTypeMap.put("sxd", "application/vnd.sun.xml.draw");
+        mimeTypeMap.put("std", "application/vnd.sun.xml.draw.template");
+        mimeTypeMap.put("sxi", "application/vnd.sun.xml.impress");
+        mimeTypeMap.put("sti", "application/vnd.sun.xml.impress.template");
+        mimeTypeMap.put("sxm", "application/vnd.sun.xml.math");
+        mimeTypeMap.put("sxw", "application/vnd.sun.xml.writer");
+        mimeTypeMap.put("sxg", "application/vnd.sun.xml.writer.global");
+        mimeTypeMap.put("stw", "application/vnd.sun.xml.writer.template");
+        mimeTypeMap.put("wbxml", "application/vnd.wap.wbxml");
+        mimeTypeMap.put("wmlc", "application/vnd.wap.wmlc");
+        mimeTypeMap.put("wmlsc", "application/vnd.wap.wmlscriptc");
+        mimeTypeMap.put("wpd", "application/wordperfect");
+        mimeTypeMap.put("aab", "application/x-authorware-bin");
+        mimeTypeMap.put("aam", "application/x-authorware-map");
+        mimeTypeMap.put("aas", "application/x-authorware-seg");
+        mimeTypeMap.put("bcpio", "application/x-bcpio");
+        mimeTypeMap.put("cbr", "application/x-cbr");
+        mimeTypeMap.put("vcd", "application/x-cdlink");
+        mimeTypeMap.put("pgn", "application/x-chess-pgn");
+        mimeTypeMap.put("cpio", "application/x-cpio");
+        mimeTypeMap.put("csh", "application/x-csh");
+        mimeTypeMap.put("dcr", "application/x-director");
+        mimeTypeMap.put(KeyManagementAlgorithmIdentifiers.DIRECT, "application/x-director");
+        mimeTypeMap.put("dxr", "application/x-director");
+        mimeTypeMap.put("fgd", "application/x-director");
+        mimeTypeMap.put("dvi", "application/x-dvi");
+        mimeTypeMap.put("spl", "application/x-futuresplash");
+        mimeTypeMap.put("gtar", "application/x-gtar");
+        mimeTypeMap.put("gzip", "application/x-gzip-compressed");
+        mimeTypeMap.put("hdf", "application/x-hdf");
+        mimeTypeMap.put("iv", "application/x-inventor");
+        mimeTypeMap.put(TextRecognitionConverter.Attributes.CLASS, "application/x-java-vm");
+        mimeTypeMap.put("js", "application/x-javascript");
+        mimeTypeMap.put("kdb", "application/x-keepass");
+        mimeTypeMap.put("kdbx", "application/x-keepass");
+        mimeTypeMap.put("skd", "application/x-koan");
+        mimeTypeMap.put("skm", "application/x-koan");
+        mimeTypeMap.put("skp", "application/x-koan");
+        mimeTypeMap.put("skt", "application/x-koan");
+        mimeTypeMap.put("latex", "application/x-latex");
+        mimeTypeMap.put("mobi", "application/x-mobipocket-ebook");
+        mimeTypeMap.put("wmd", "application/x-ms-wmd");
+        mimeTypeMap.put("wmz", "application/x-ms-wmz");
+        mimeTypeMap.put("cdf", "application/x-netcdf");
+        mimeTypeMap.put("nc", "application/x-netcdf");
+        mimeTypeMap.put("pac", "application/x-ns-proxy-autoconfig");
+        mimeTypeMap.put("ogg", "video/x-ogg");
+        mimeTypeMap.put("crl", "application/x-pkcs7-crl");
+        mimeTypeMap.put("sh", "application/x-sh");
+        mimeTypeMap.put("shar", "application/x-shar");
+        mimeTypeMap.put("swf", "application/x-shockwave-flash");
+        mimeTypeMap.put("sit", "application/x-stuffit");
+        mimeTypeMap.put("sv4cpio", "application/x-sv4cpio");
+        mimeTypeMap.put("sv4crc", "application/x-sv4crc");
+        mimeTypeMap.put("tar", "application/x-tar");
+        mimeTypeMap.put("tcl", "application/x-tcl");
+        mimeTypeMap.put("tex", "application/x-tex");
+        mimeTypeMap.put("texi", "application/x-texinfo");
+        mimeTypeMap.put("texinfo", "application/x-texinfo");
+        mimeTypeMap.put("roff", "application/x-troff");
+        mimeTypeMap.put("t", "application/x-troff");
+        mimeTypeMap.put("tr", "application/x-troff");
+        mimeTypeMap.put("man", "application/x-troff-man");
+        mimeTypeMap.put("me", "application/x-troff-me");
+        mimeTypeMap.put("ms", "application/x-troff-ms");
+        mimeTypeMap.put("ustar", "application/x-ustar");
+        mimeTypeMap.put("src", "application/x-wais-source");
+        mimeTypeMap.put("wsrc", "application/x-wais-source");
+        mimeTypeMap.put("crt", "application/x-x509-ca-cert");
+        mimeTypeMap.put("xht", "application/xhtml+xml");
+        mimeTypeMap.put("xhtml", "application/xhtml+xml");
+        mimeTypeMap.put("xmind", "application/xmind");
+        mimeTypeMap.put("xmmap", "application/xmmap");
+        mimeTypeMap.put("zip", "application/zip");
+        mimeTypeMap.put("amr", MimeTypes.AUDIO_AMR);
+        mimeTypeMap.put("au", "audio/basic");
+        mimeTypeMap.put("snd", "audio/basic");
+        mimeTypeMap.put("flac", MimeTypes.AUDIO_FLAC);
+        mimeTypeMap.put("kar", MimeTypes.AUDIO_MIDI);
+        mimeTypeMap.put("mid", MimeTypes.AUDIO_MIDI);
+        mimeTypeMap.put("midi", MimeTypes.AUDIO_MIDI);
+        mimeTypeMap.put("mp2", MimeTypes.AUDIO_MPEG);
+        mimeTypeMap.put(BoxRepresentation.TYPE_MP3, MimeTypes.AUDIO_MPEG);
+        mimeTypeMap.put("mpga", MimeTypes.AUDIO_MPEG);
+        mimeTypeMap.put("aif", "audio/x-aiff");
+        mimeTypeMap.put("aifc", "audio/x-aiff");
+        mimeTypeMap.put("aiff", "audio/x-aiff");
+        mimeTypeMap.put("m4a", "audio/x-m4a");
+        mimeTypeMap.put("m3u", "audio/x-mpegurl");
+        mimeTypeMap.put("wax", "audio/x-ms-wax");
+        mimeTypeMap.put("wma", "audio/x-ms-wma");
+        mimeTypeMap.put("ram", "audio/x-pn-realaudio");
+        mimeTypeMap.put("rm", "audio/x-pn-realaudio");
+        mimeTypeMap.put("rpm", "audio/x-pn-realaudio-plugin");
+        mimeTypeMap.put("ra", "audio/x-realaudio");
+        mimeTypeMap.put("wav", "audio/x-wav");
+        mimeTypeMap.put("pdb", "chemical/x-pdb");
+        mimeTypeMap.put("xyz", "chemical/x-xyz");
+        mimeTypeMap.put("woff2", "font/woff2");
+        mimeTypeMap.put("bmp", MimeTypes.IMAGE_BMP);
+        mimeTypeMap.put(SupportedFileExtensions.GIF_EXTENSION, "image/gif");
+        mimeTypeMap.put("ief", "image/ief");
+        mimeTypeMap.put("jfif", MimeTypes.IMAGE_JPEG);
+        mimeTypeMap.put("jpe", MimeTypes.IMAGE_JPEG);
+        mimeTypeMap.put("jpeg", MimeTypes.IMAGE_JPEG);
+        mimeTypeMap.put(BoxRepresentation.TYPE_JPG, MimeTypes.IMAGE_JPEG);
+        mimeTypeMap.put(BoxRepresentation.TYPE_PNG, MimeTypes.IMAGE_PNG);
+        mimeTypeMap.put(SupportedFileExtensions.PSD_EXTENSION, "image/psd");
+        mimeTypeMap.put("heic", MimeTypes.IMAGE_HEIC);
+        mimeTypeMap.put("svg", "image/svg+xml");
+        mimeTypeMap.put("svgz", "image/svg+xml");
+        mimeTypeMap.put("tif", "image/tiff");
+        mimeTypeMap.put("tiff", "image/tiff");
+        mimeTypeMap.put("djv", "image/vnd.djvu");
+        mimeTypeMap.put("djvu", "image/vnd.djvu");
+        mimeTypeMap.put("wbmp", "image/vnd.wap.wbmp");
+        mimeTypeMap.put("ras", "image/x-cmu-raster");
+        mimeTypeMap.put("fh", "image/x-freehand");
+        mimeTypeMap.put("fh4", "image/x-freehand");
+        mimeTypeMap.put("fh5", "image/x-freehand");
+        mimeTypeMap.put("fh7", "image/x-freehand");
+        mimeTypeMap.put("fhc", "image/x-freehand");
+        mimeTypeMap.put("pnm", "image/x-portable-anymap");
+        mimeTypeMap.put("pbm", "image/x-portable-bitmap");
+        mimeTypeMap.put("pgm", "image/x-portable-graymap");
+        mimeTypeMap.put("ppm", "image/x-portable-pixmap");
+        mimeTypeMap.put("rgb", "image/x-rgb");
+        mimeTypeMap.put("xbm", "image/x-xbitmap");
+        mimeTypeMap.put("xpm", "image/x-xpixmap");
+        mimeTypeMap.put("xwd", "image/x-xwindowdump");
+        mimeTypeMap.put("ico", "image/x-icon");
+        mimeTypeMap.put("eml", BoxCommonConstants.EMAIL_MIME_TYPE);
+        mimeTypeMap.put("mht", BoxCommonConstants.EMAIL_MIME_TYPE);
+        mimeTypeMap.put("mime", BoxCommonConstants.EMAIL_MIME_TYPE);
+        mimeTypeMap.put("iges", "model/iges");
+        mimeTypeMap.put("igs", "model/iges");
+        mimeTypeMap.put("mesh", "model/mesh");
+        mimeTypeMap.put("msh", "model/mesh");
+        mimeTypeMap.put("silo", "model/mesh");
+        mimeTypeMap.put("vrml", "model/vrml");
+        mimeTypeMap.put("wrl", "model/vrml");
+        mimeTypeMap.put("css", "text/css");
+        mimeTypeMap.put("csv", "text/csv");
+        mimeTypeMap.put("gdoc", "text/html");
+        mimeTypeMap.put("htm", "text/html");
+        mimeTypeMap.put(TextRecognitionConverter.Tags.HTML, "text/html");
+        mimeTypeMap.put("webdoc", "text/html");
+        mimeTypeMap.put(ResourceAttributes.TelemetrySdkLanguageValues.JAVA, "text/java");
+        mimeTypeMap.put(ResourceAttributes.TelemetrySdkLanguageValues.PHP, "text/php");
+        mimeTypeMap.put("asc", "text/plain");
+        mimeTypeMap.put("py", "text/plain");
+        mimeTypeMap.put("txt", "text/plain");
+        mimeTypeMap.put("rtx", "text/richtext");
+        mimeTypeMap.put("rtf", "text/rtf");
+        mimeTypeMap.put("sgm", "text/sgml");
+        mimeTypeMap.put("sgml", "text/sgml");
+        mimeTypeMap.put("sql", "text/sql");
+        mimeTypeMap.put("tsv", "text/tab-separated-values");
+        mimeTypeMap.put("jad", "text/vnd.sun.j2me.app-descriptor");
+        mimeTypeMap.put("wml", "text/vnd.wap.wml");
+        mimeTypeMap.put("wmls", "text/vnd.wap.wmlscript");
+        mimeTypeMap.put("rst", "text/x-rst");
+        mimeTypeMap.put("etx", "text/x-setext");
+        mimeTypeMap.put("dtd", "text/xml");
+        mimeTypeMap.put("xml", "text/xml");
+        mimeTypeMap.put("xsl", "text/xml");
+        mimeTypeMap.put("3g2", MimeTypes.VIDEO_H263);
+        mimeTypeMap.put("3gp", MimeTypes.VIDEO_H263);
+        mimeTypeMap.put("3gpp", MimeTypes.VIDEO_H263);
+        mimeTypeMap.put(CmcdConfiguration.KEY_DEADLINE, "video/dl");
+        mimeTypeMap.put("dif", "video/dv");
+        mimeTypeMap.put("dv", "video/dv");
+        mimeTypeMap.put("fli", "video/fli");
+        mimeTypeMap.put("m4v", "video/m4v");
+        mimeTypeMap.put(BoxRepresentation.TYPE_MP4, MimeTypes.VIDEO_MP4);
+        mimeTypeMap.put("mpe", MimeTypes.VIDEO_MPEG);
+        mimeTypeMap.put("mpeg", MimeTypes.VIDEO_MPEG);
+        mimeTypeMap.put("mpg", MimeTypes.VIDEO_MPEG);
+        mimeTypeMap.put("vob", MimeTypes.VIDEO_MPEG);
+        mimeTypeMap.put("mts", "video/mts");
+        mimeTypeMap.put("mov", MimeTypes.VIDEO_QUICK_TIME);
+        mimeTypeMap.put("qt", MimeTypes.VIDEO_QUICK_TIME);
+        mimeTypeMap.put("mxu", "video/vnd.mpegurl");
+        mimeTypeMap.put("webm", MimeTypes.VIDEO_WEBM);
+        mimeTypeMap.put("flv", MimeTypes.VIDEO_FLV);
+        mimeTypeMap.put("lsf", "video/x-la-asf");
+        mimeTypeMap.put("lsx", "video/x-la-asf");
+        mimeTypeMap.put("m4v", "video/x-m4v");
+        mimeTypeMap.put("mkv", MimeTypes.VIDEO_MATROSKA);
+        mimeTypeMap.put("mng", "video/x-mng");
+        mimeTypeMap.put("asf", "video/x-ms-asf");
+        mimeTypeMap.put("asx", "video/x-ms-asf");
+        mimeTypeMap.put("wm", "video/x-ms-wm");
+        mimeTypeMap.put("wmv", "video/x-ms-wmv");
+        mimeTypeMap.put("wmx", "video/x-ms-wmx");
+        mimeTypeMap.put("wvx", "video/x-ms-wvx");
+        mimeTypeMap.put("avi", MimeTypes.VIDEO_AVI);
+        mimeTypeMap.put("movie", "video/x-sgi-movie");
+        mimeTypeMap.put("vx", "video/x-rad-screenplay");
+        mimeTypeMap.put("mv", "video/x-sgi-movie");
+        mimeTypeMap.put("ice", "x-conference/x-cooltalk");
+        mimeTypeMap.put("vcf", "text/x-vcard");
+    }
+
+    public static String getTypeFromExt(String str) {
+        if (str == null || str.length() < 1) {
+            return null;
+        }
+        String str2 = mimeTypeMap.get(str.toLowerCase(Locale.ENGLISH));
+        return str2 == null ? "application/" + str.toLowerCase(Locale.ENGLISH) : str2;
+    }
+
+    public static String getExtFromType(String str) {
+        if (str == null || str.length() < 1) {
+            return null;
+        }
+        HashMap map = new HashMap(mimeTypeMap.size());
+        for (String str2 : mimeTypeMap.keySet()) {
+            map.put(mimeTypeMap.get(str2), str2);
+        }
+        return (String) map.get(str.toLowerCase(Locale.ENGLISH));
+    }
+
+    public static ArrayList<String> getPromotedPartnerApps(String str, Context context) {
+        String str2 = mimeTypeMap.get(str);
+        if (str2 == null) {
+            return null;
+        }
+        List<PromotedPartnerApp> partnerApps = new PromotedPartnerApp.PartnerAppsInfo().getPartnerApps(context, str2);
+        ArrayList<String> arrayList = new ArrayList<>(partnerApps.size());
+        Iterator<PromotedPartnerApp> it = partnerApps.iterator();
+        while (it.hasNext()) {
+            arrayList.add(it.next().mPackage);
+        }
+        return arrayList;
+    }
+}

@@ -1,0 +1,10 @@
+package com.pspdfkit.configuration.activity;
+
+/* JADX INFO: loaded from: classes3.dex */
+public enum UserInterfaceViewMode {
+    USER_INTERFACE_VIEW_MODE_AUTOMATIC,
+    USER_INTERFACE_VIEW_MODE_AUTOMATIC_BORDER_PAGES,
+    USER_INTERFACE_VIEW_MODE_VISIBLE,
+    USER_INTERFACE_VIEW_MODE_HIDDEN,
+    USER_INTERFACE_VIEW_MODE_MANUAL
+}

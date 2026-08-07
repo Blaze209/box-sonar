@@ -1,0 +1,24 @@
+package com.google.android.gms.internal.measurement;
+
+import android.app.Activity;
+import android.os.RemoteException;
+import com.google.android.gms.dynamic.ObjectWrapper;
+
+/* JADX INFO: compiled from: com.google.android.gms:play-services-measurement-sdk-api@@17.2.3 */
+/* JADX INFO: loaded from: classes13.dex */
+final class zzbd extends zzx.zza {
+    private final /* synthetic */ Activity zzc;
+    private final /* synthetic */ zzx.zzd zzd;
+
+    /* JADX WARN: 'super' call moved to the top of the method (can break code semantics) */
+    zzbd(zzx.zzd zzdVar, Activity activity) {
+        super(zzx.this);
+        this.zzd = zzdVar;
+        this.zzc = activity;
+    }
+
+    @Override // com.google.android.gms.internal.measurement.zzx.zza
+    final void zza() throws RemoteException {
+        zzx.this.zzr.onActivityResumed(ObjectWrapper.wrap(this.zzc), this.zzb);
+    }
+}

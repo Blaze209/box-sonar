@@ -1,0 +1,31 @@
+package external.sdk.pendo.io.mozilla.javascript;
+
+/* JADX INFO: loaded from: classes4.dex */
+public class Synchronizer extends Delegator {
+    private Object syncObject;
+
+    public Synchronizer(Scriptable scriptable) {
+        super(scriptable);
+    }
+
+    @Override // external.sdk.pendo.io.mozilla.javascript.Delegator, external.sdk.pendo.io.mozilla.javascript.Function, external.sdk.pendo.io.mozilla.javascript.Callable
+    public Object call(Context context, Scriptable scriptable, Scriptable scriptable2, Object[] objArr) {
+        Object objCall;
+        Object objUnwrap = this.syncObject;
+        if (objUnwrap == null) {
+            objUnwrap = scriptable2;
+        }
+        if (objUnwrap instanceof Wrapper) {
+            objUnwrap = ((Wrapper) objUnwrap).unwrap();
+        }
+        synchronized (objUnwrap) {
+            objCall = ((Function) this.obj).call(context, scriptable, scriptable2, objArr);
+        }
+        return objCall;
+    }
+
+    public Synchronizer(Scriptable scriptable, Object obj) {
+        super(scriptable);
+        this.syncObject = obj;
+    }
+}

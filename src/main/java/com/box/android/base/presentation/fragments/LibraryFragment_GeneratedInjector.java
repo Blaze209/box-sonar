@@ -1,0 +1,6 @@
+package com.box.android.base.presentation.fragments;
+
+/* JADX INFO: loaded from: classes9.dex */
+public interface LibraryFragment_GeneratedInjector {
+    void injectLibraryFragment(LibraryFragment libraryFragment);
+}

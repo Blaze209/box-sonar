@@ -1,0 +1,40 @@
+package com.google.firebase.iid;
+
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
+import android.util.Log;
+import com.microsoft.intune.mam.client.content.MAMBroadcastReceiver;
+import javax.annotation.Nullable;
+
+/* JADX INFO: compiled from: com.google.firebase:firebase-iid@@20.1.0 */
+/* JADX INFO: loaded from: classes14.dex */
+final class zzbd extends MAMBroadcastReceiver {
+
+    @Nullable
+    private zzba zza;
+
+    public zzbd(zzba zzbaVar) {
+        this.zza = zzbaVar;
+    }
+
+    public final void zza() {
+        if (FirebaseInstanceId.zzd()) {
+            Log.d("FirebaseInstanceId", "Connectivity change received registered");
+        }
+        this.zza.zza().registerReceiver(this, new IntentFilter("android.net.conn.CONNECTIVITY_CHANGE"));
+    }
+
+    @Override // com.microsoft.intune.mam.client.content.HookedBroadcastReceiver
+    public final void onMAMReceive(Context context, Intent intent) {
+        zzba zzbaVar = this.zza;
+        if (zzbaVar != null && zzbaVar.zzb()) {
+            if (FirebaseInstanceId.zzd()) {
+                Log.d("FirebaseInstanceId", "Connectivity changed. Starting background sync.");
+            }
+            FirebaseInstanceId.zza(this.zza, 0L);
+            this.zza.zza().unregisterReceiver(this);
+            this.zza = null;
+        }
+    }
+}

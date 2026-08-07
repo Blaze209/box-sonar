@@ -1,0 +1,20 @@
+package com.pspdfkit;
+
+/* JADX INFO: loaded from: classes3.dex */
+public enum LicenseFeature {
+    PDF_CREATION,
+    DIGITAL_SIGNATURES,
+    ANNOTATION_EDITING,
+    INDEXED_FTS,
+    ANNOTATION_REPLIES,
+    IMAGE_DOCUMENT,
+    DOCUMENT_EDITING,
+    FORMS,
+    REDACTION,
+    COMPARISON,
+    WEBKIT_HTML_CONVERSION,
+    READER_VIEW,
+    ELECTRONIC_SIGNATURES,
+    MEASUREMENT_TOOLS,
+    CONTENT_EDITING
+}

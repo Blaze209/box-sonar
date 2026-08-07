@@ -1,0 +1,27 @@
+package kotlin.reflect.jvm.internal.impl.descriptors;
+
+import com.box.android.capture.documentscanning.logic.TextRecognitionConverter;
+import kotlin.enums.EnumEntries;
+import kotlin.enums.EnumEntriesKt;
+
+/* JADX INFO: compiled from: ClassKind.kt */
+/* JADX INFO: loaded from: classes5.dex */
+public enum ClassKind {
+    CLASS(TextRecognitionConverter.Attributes.CLASS),
+    INTERFACE("interface"),
+    ENUM_CLASS("enum class"),
+    ENUM_ENTRY(null),
+    ANNOTATION_CLASS("annotation class"),
+    OBJECT("object");
+
+    private static final /* synthetic */ EnumEntries $ENTRIES = EnumEntriesKt.enumEntries(values());
+    private final String codeRepresentation;
+
+    ClassKind(String str) {
+        this.codeRepresentation = str;
+    }
+
+    public final boolean isSingleton() {
+        return this == OBJECT || this == ENUM_ENTRY;
+    }
+}

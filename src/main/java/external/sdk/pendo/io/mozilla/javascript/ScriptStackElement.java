@@ -1,0 +1,67 @@
+package external.sdk.pendo.io.mozilla.javascript;
+
+import com.box.android.base.presentation.components.commentbar.CommentBarInputBoxKt;
+import java.io.Serializable;
+import kotlinx.serialization.json.internal.AbstractJsonLexerKt;
+
+/* JADX INFO: loaded from: classes4.dex */
+public final class ScriptStackElement implements Serializable {
+    private static final long serialVersionUID = -6416688260860477449L;
+    public final String fileName;
+    public final String functionName;
+    public final int lineNumber;
+
+    public ScriptStackElement(String str, String str2, int i) {
+        this.fileName = str;
+        this.functionName = str2;
+        this.lineNumber = i;
+    }
+
+    private void appendV8Location(StringBuilder sb) {
+        sb.append(this.fileName).append(AbstractJsonLexerKt.COLON);
+        int i = this.lineNumber;
+        if (i <= -1) {
+            i = 0;
+        }
+        sb.append(i).append(":0");
+    }
+
+    public void renderJavaStyle(StringBuilder sb) {
+        sb.append("\tat ").append(this.fileName);
+        if (this.lineNumber > -1) {
+            sb.append(AbstractJsonLexerKt.COLON).append(this.lineNumber);
+        }
+        if (this.functionName != null) {
+            sb.append(" (").append(this.functionName).append(')');
+        }
+    }
+
+    public void renderMozillaStyle(StringBuilder sb) {
+        String str = this.functionName;
+        if (str != null) {
+            sb.append(str).append("()");
+        }
+        sb.append(CommentBarInputBoxKt.MENTION_SYMBOL).append(this.fileName);
+        if (this.lineNumber > -1) {
+            sb.append(AbstractJsonLexerKt.COLON).append(this.lineNumber);
+        }
+    }
+
+    public void renderV8Style(StringBuilder sb) {
+        sb.append("    at ");
+        String str = this.functionName;
+        if (str == null || "anonymous".equals(str) || "undefined".equals(this.functionName)) {
+            appendV8Location(sb);
+            return;
+        }
+        sb.append(this.functionName).append(" (");
+        appendV8Location(sb);
+        sb.append(')');
+    }
+
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+        renderMozillaStyle(sb);
+        return sb.toString();
+    }
+}

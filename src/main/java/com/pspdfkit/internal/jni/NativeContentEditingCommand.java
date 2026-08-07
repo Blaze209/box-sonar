@@ -1,0 +1,26 @@
+package com.pspdfkit.internal.jni;
+
+/* JADX INFO: loaded from: classes3.dex */
+public enum NativeContentEditingCommand {
+    GET_TEXT_BLOCKS,
+    RENDER_TEXT_BLOCK,
+    SET_CURSOR,
+    MOVE_CURSOR,
+    SET_SELECTION,
+    SET_SELECTION_RANGE,
+    INSERT_TEXT,
+    DELETE_RANGE,
+    DELETE_CLUSTER,
+    UNDO,
+    REDO,
+    RESTORE,
+    APPLY_FORMAT,
+    LAYOUT,
+    SAVE_TO_DOCUMENT,
+    AVAILABLE_FACES,
+    DETECT_PARAGRAPHS,
+    CREATE_TEXT_BLOCK,
+    INSERT_CONTENT_REF,
+    DETECT_PAGE_ELEMENTS,
+    RENDER_GRAPHIC_BLOCK
+}

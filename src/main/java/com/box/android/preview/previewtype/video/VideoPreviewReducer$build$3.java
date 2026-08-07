@@ -1,0 +1,23 @@
+package com.box.android.preview.previewtype.video;
+
+import kotlin.Metadata;
+import kotlin.jvm.functions.Function1;
+import kotlin.jvm.internal.FunctionReferenceImpl;
+import kotlin.jvm.internal.Intrinsics;
+
+/* JADX INFO: compiled from: VideoPreviewReducer.kt */
+/* JADX INFO: loaded from: classes12.dex */
+@Metadata(k = 3, mv = {2, 2, 0}, xi = 48)
+final /* synthetic */ class VideoPreviewReducer$build$3 extends FunctionReferenceImpl implements Function1<FrameAnnotationReducer.Action, VideoPreviewReducer.Action.FrameAnnotation> {
+    public static final VideoPreviewReducer$build$3 INSTANCE = new VideoPreviewReducer$build$3();
+
+    VideoPreviewReducer$build$3() {
+        super(1, VideoPreviewReducer.Action.FrameAnnotation.class, "<init>", "<init>(Lcom/box/android/preview/previewtype/video/FrameAnnotationReducer$Action;)V", 0);
+    }
+
+    @Override // kotlin.jvm.functions.Function1
+    public final VideoPreviewReducer.Action.FrameAnnotation invoke(FrameAnnotationReducer.Action p0) {
+        Intrinsics.checkNotNullParameter(p0, "p0");
+        return new VideoPreviewReducer.Action.FrameAnnotation(p0);
+    }
+}
