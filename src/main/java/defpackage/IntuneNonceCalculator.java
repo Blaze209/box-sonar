@@ -14,6 +14,7 @@ import kotlin.text.Charsets;
 public final class IntuneNonceCalculator {
     public static final IntuneNonceCalculator INSTANCE = new IntuneNonceCalculator();
     private static final int NONCE_PRIME_NUMBER = 797;
+    private static final java.security.SecureRandom SECURE_RANDOM = new java.security.SecureRandom();
 
     private IntuneNonceCalculator() {
     }
@@ -27,7 +28,7 @@ public final class IntuneNonceCalculator {
             bigInteger = new BigInteger(1, messageDigest.digest(bytes));
         } else {
             byte[] bArr = new byte[16];
-            new java.security.SecureRandom().nextBytes(bArr);
+            SECURE_RANDOM.nextBytes(bArr);
             bigInteger = new BigInteger(1, bArr);
         }
         BigInteger bigIntegerValueOf = BigInteger.valueOf(NONCE_PRIME_NUMBER);
