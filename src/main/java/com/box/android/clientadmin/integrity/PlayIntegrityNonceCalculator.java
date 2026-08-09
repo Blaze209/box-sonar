@@ -15,7 +15,12 @@ public final class PlayIntegrityNonceCalculator {
 
     public final String calculate(String uniqueValue) {
         Intrinsics.checkNotNullParameter(uniqueValue, "uniqueValue");
-        BigInteger bigInteger = new BigInteger(uniqueValue);
+        BigInteger bigInteger;
+        try {
+            bigInteger = new BigInteger(uniqueValue);
+        } catch (NumberFormatException e) {
+            return "";
+        }
         BigInteger bigIntegerValueOf = BigInteger.valueOf(NONCE_PRIME_NUMBER);
         Intrinsics.checkNotNullExpressionValue(bigIntegerValueOf, "valueOf(...)");
         String string = bigInteger.multiply(bigIntegerValueOf).toString();

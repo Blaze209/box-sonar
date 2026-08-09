@@ -6,7 +6,6 @@ import java.security.NoSuchAlgorithmException;
 import java.util.Base64;
 import kotlin.Metadata;
 import kotlin.jvm.internal.Intrinsics;
-import kotlin.random.Random;
 import kotlin.text.Charsets;
 
 /* JADX INFO: compiled from: IntuneNonceCalculator.kt */
@@ -28,7 +27,7 @@ public final class IntuneNonceCalculator {
             bigInteger = new BigInteger(1, messageDigest.digest(bytes));
         } else {
             byte[] bArr = new byte[16];
-            Random.INSTANCE.nextBytes(bArr);
+            new java.security.SecureRandom().nextBytes(bArr);
             bigInteger = new BigInteger(1, bArr);
         }
         BigInteger bigIntegerValueOf = BigInteger.valueOf(NONCE_PRIME_NUMBER);

@@ -23,6 +23,12 @@ public class RNGetRandomValuesModule extends ReactContextBaseJavaModule {
 
     @ReactMethod(isBlockingSynchronousMethod = true)
     public String getRandomBase64(int i) throws NoSuchAlgorithmException {
+        if (i < 0) {
+            throw new IllegalArgumentException("Byte count cannot be negative: " + i);
+        }
+        if (i > 65536) {
+            throw new IllegalArgumentException("Byte count exceeds maximum limit (65536): " + i);
+        }
         byte[] bArr = new byte[i];
         new SecureRandom().nextBytes(bArr);
         return Base64.encodeToString(bArr, 2);
